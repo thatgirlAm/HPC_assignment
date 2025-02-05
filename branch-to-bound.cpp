@@ -2,7 +2,6 @@
 // Created by amaelle.diop on 21/01/2025.
 // ---This script performs the serial version of the branch-to-bound solving of the wondering salesman problem---//
 
-
 #include <iostream>
 #include <vector>
 #include <climits>
@@ -10,11 +9,11 @@
 #include <string>
 
 // Function to calculate the total distance of a path
-int distance(const std::vector<std::vector<int>>& matrix, const std::string& path) {
+int distance(const std::vector<std::vector<int>>& matrix, const std::vector<int>& path) {
     int res = 0;
     for (size_t i = 0; i < path.size() - 1; i++) {
-        int city_1 = path[i] - '1';    // Convert char to 0-based index
-        int city_2 = path[i + 1] - '1'; // Convert char to 0-based index
+        int city_1 = path[i];    // Current city (0-based index)
+        int city_2 = path[i + 1]; // Next city (0-based index)
         res += matrix[city_1][city_2]; // Add distance between city_1 and city_2
     }
     return res;
@@ -22,14 +21,14 @@ int distance(const std::vector<std::vector<int>>& matrix, const std::string& pat
 
 // Branch and bound function to explore all possible paths
 void branchAndBound(const std::vector<std::vector<int>>& matrix,
-                    std::string currentPath,
+                    std::vector<int>& currentPath,
                     std::vector<bool>& visited,
                     int& bestDist,
-                    std::string& bestPath) {
+                    std::vector<int>& bestPath) {
     int n = matrix.size();
 
     // If all cities are visited, calculate the total distance of the path
-    if (currentPath.length() == n) {
+    if (currentPath.size() == n) {
         int currentDist = distance(matrix, currentPath);
         if (currentDist < bestDist) {
             bestDist = currentDist; // Update the best distance
@@ -42,7 +41,7 @@ void branchAndBound(const std::vector<std::vector<int>>& matrix,
     for (int i = 0; i < n; i++) {
         if (!visited[i]) {
             visited[i] = true;
-            currentPath += std::to_string(i + 1); // Append the city (1-based index)
+            currentPath.push_back(i); // Append the city (0-based index)
 
             branchAndBound(matrix, currentPath, visited, bestDist, bestPath);
 
@@ -54,9 +53,9 @@ void branchAndBound(const std::vector<std::vector<int>>& matrix,
 }
 
 // Function to solve the wandering salesman problem
-std::pair<std::string, int> solveWanderingSalesman(const std::vector<std::vector<int>>& distances) {
+std::pair<std::vector<int>, int> solveWanderingSalesman(const std::vector<std::vector<int>>& distances) {
     int n = distances.size();
-    std::string bestPath;
+    std::vector<int> bestPath;
     int bestDist = INT_MAX;
 
     // Try each city as the starting point
@@ -64,7 +63,7 @@ std::pair<std::string, int> solveWanderingSalesman(const std::vector<std::vector
         std::vector<bool> visited(n, false);
         visited[startCity] = true;
 
-        std::string currentPath = std::to_string(startCity + 1); // Start with the starting city
+        std::vector<int> currentPath = {startCity}; // Start with the starting city
 
         branchAndBound(distances, currentPath, visited, bestDist, bestPath);
     }

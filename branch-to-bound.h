@@ -9,12 +9,12 @@
 #include <string>
 #include <utility>
 
-int distance(const std::vector<std::vector<int>>& matrix, const std::string& path);
+int distance(const std::vector<std::vector<int>>& matrix, const std::vector<int>& path);
 void branchAndBound(const std::vector<std::vector<int>>& matrix,
-                    std::string currentPath,
+                    std::vector<int>& currentPath,
                     std::vector<bool>& visited,
                     int& bestDist,
-                    std::string& bestPath);
-std::pair<std::string, int> solveWanderingSalesman(const std::vector<std::vector<int>>& distances);
+                    std::vector<int>& bestPath);
+std::pair<std::vector<int>, int> solveWanderingSalesman(const std::vector<std::vector<int>>& distances);
 
 #endif

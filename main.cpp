@@ -9,7 +9,7 @@
 
 int main() {
     try {
-        std::string file = "cities/dist4"; // Input file path
+        std::string file = "cities/dist17"; // Input file path
         std::cout << "Reading file: " << file << "\n";
 
         std::vector<std::vector<int>> distances = function_distances(file);
@@ -30,8 +30,8 @@ int main() {
         auto [bestPath, bestDist] = solveWanderingSalesman(distances);
 
         std::cout << "\nBest path found: ";
-        for (char c : bestPath) {
-            std::cout << c << " ";
+        for (int city : bestPath) {
+            std::cout << (city + 1) << " "; // Convert to 1-based index for display
         }
         std::cout << "\nTotal distance: " << bestDist << "\n";
 
